@@ -22,18 +22,88 @@
             position: relative;
         }
         
-        /* Hintergrund Video */
-        .video-background {
+        /* Animierte Herzen Hintergrund */
+        .hearts-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -2;
-            object-fit: cover;
+            overflow: hidden;
+            pointer-events: none;
         }
 
-        /* Fallback Gradient falls Video nicht lädt */
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 30px;
+            animation: float-up linear infinite;
+            pointer-events: none;
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; font-size: 40px; }
+        .heart:nth-child(2) { left: 20%; animation-duration: 10s; animation-delay: 2s; font-size: 25px; }
+        .heart:nth-child(3) { left: 30%; animation-duration: 12s; animation-delay: 4s; font-size: 30px; }
+        .heart:nth-child(4) { left: 40%; animation-duration: 9s; animation-delay: 1s; font-size: 25px; }
+        .heart:nth-child(5) { left: 50%; animation-duration: 11s; animation-delay: 3s; font-size: 40px; }
+        .heart:nth-child(6) { left: 60%; animation-duration: 7s; animation-delay: 5s; font-size: 30px; }
+        .heart:nth-child(7) { left: 70%; animation-duration: 13s; animation-delay: 2.5s; font-size: 25px; }
+        .heart:nth-child(8) { left: 80%; animation-duration: 8.5s; animation-delay: 4.5s; font-size: 30px; }
+        .heart:nth-child(9) { left: 90%; animation-duration: 10.5s; animation-delay: 1.5s; font-size: 40px; }
+        .heart:nth-child(10) { left: 15%; animation-duration: 9.5s; animation-delay: 3.5s; font-size: 25px; }
+        .heart:nth-child(11) { left: 35%; animation-duration: 11.5s; animation-delay: 0.5s; font-size: 30px; }
+        .heart:nth-child(12) { left: 65%; animation-duration: 12.5s; animation-delay: 2.8s; font-size: 40px; }
+        .heart:nth-child(13) { left: 85%; animation-duration: 7.5s; animation-delay: 4.2s; font-size: 25px; }
+        .heart:nth-child(14) { left: 25%; animation-duration: 14s; animation-delay: 1.8s; font-size: 30px; }
+        .heart:nth-child(15) { left: 75%; animation-duration: 8.8s; animation-delay: 3.2s; font-size: 40px; }
+        .heart:nth-child(16) { left: 5%; animation-duration: 9.2s; animation-delay: 1.2s; font-size: 25px; }
+        .heart:nth-child(17) { left: 45%; animation-duration: 10.8s; animation-delay: 3.8s; font-size: 30px; }
+        .heart:nth-child(18) { left: 95%; animation-duration: 8.2s; animation-delay: 0.8s; font-size: 40px; }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Herz-Pulse-Animation für mehr Lebendigkeit */
+        .heart:nth-child(odd) {
+            animation-name: float-up-pulse;
+        }
+
+        @keyframes float-up-pulse {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) scale(1.3);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Fallback: Animierter Gradient falls Video nicht lädt */
         .gradient-background {
             position: fixed;
             top: 0;
@@ -41,17 +111,25 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
         }
 
-        /* Overlay für bessere Lesbarkeit */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Overlay für bessere Lesbarkeit - leichter für Herzen */
         .video-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.2);
             z-index: -1;
         }
         
@@ -320,13 +398,8 @@
     <!-- Fallback Gradient Background -->
     <div class="gradient-background"></div>
     
-    <!-- Hintergrund Video -->
-    <video class="video-background" autoplay muted loop id="bgVideo">
-        <!-- Lokales Video (ersetzen Sie mit Ihrem Video) -->
-        <source src="/static/background-video.mp4" type="video/mp4">
-        <!-- Fallback für Online-Video falls gewünscht -->
-        <!-- <source src="https://example.com/your-video.mp4" type="video/mp4"> -->
-    </video>
+    <!-- Animierte Herzen statt Video -->
+    <div class="hearts-background"></div>
     
     <div class="video-overlay"></div>
 
@@ -542,16 +615,25 @@
             lastTouchEnd = now;
         }, false);
 
-        // Video Fallback handling
-        document.getElementById('bgVideo').addEventListener('error', function() {
-            console.log('Video konnte nicht geladen werden, verwende Gradient-Hintergrund');
-            // Gradient-Background ist bereits als Fallback vorhanden
-        });
+        // Herzen dynamisch erstellen
+        function createHearts() {
+            const heartsContainer = document.querySelector('.hearts-background');
+            const heartSymbols = ['♥', '♡', '💕', '💖', '💗', '💘', '💙', '💜', '🤍', '❤️'];
+            
+            // 18 Herzen erstellen (15 + 20% = 3 mehr)
+            for (let i = 0; i < 18; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                heartsContainer.appendChild(heart);
+            }
+        }
 
-        // Video loaded successfully
-        document.getElementById('bgVideo').addEventListener('loadeddata', function() {
-            console.log('Hintergrund-Video erfolgreich geladen');
-        });
+        // Herzen beim Laden erstellen
+        document.addEventListener('DOMContentLoaded', createHearts);
     </script>
 </body>
 </html>
