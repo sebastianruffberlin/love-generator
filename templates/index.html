@@ -22,7 +22,7 @@
             position: relative;
         }
         
-        /* Animierte Herzen Hintergrund */
+        /* 3D Herzen die auf den User zufliegen */
         .hearts-background {
             position: fixed;
             top: 0;
@@ -32,78 +32,139 @@
             z-index: -2;
             overflow: hidden;
             pointer-events: none;
+            perspective: 1000px;
+            background: radial-gradient(ellipse at center, #2d1b69 0%, #0c0b2a 100%);
         }
 
         .heart {
             position: absolute;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 30px;
-            animation: float-up linear infinite;
+            color: #ff1493;
+            font-size: 20px;
+            animation: flyTowards linear infinite;
             pointer-events: none;
+            text-shadow: 
+                0 0 10px #ff1493,
+                0 0 20px #ff1493,
+                0 0 30px #ff1493;
+            opacity: 0;
         }
 
-        .heart:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; font-size: 40px; }
-        .heart:nth-child(2) { left: 20%; animation-duration: 10s; animation-delay: 2s; font-size: 25px; }
-        .heart:nth-child(3) { left: 30%; animation-duration: 12s; animation-delay: 4s; font-size: 30px; }
-        .heart:nth-child(4) { left: 40%; animation-duration: 9s; animation-delay: 1s; font-size: 25px; }
-        .heart:nth-child(5) { left: 50%; animation-duration: 11s; animation-delay: 3s; font-size: 40px; }
-        .heart:nth-child(6) { left: 60%; animation-duration: 7s; animation-delay: 5s; font-size: 30px; }
-        .heart:nth-child(7) { left: 70%; animation-duration: 13s; animation-delay: 2.5s; font-size: 25px; }
-        .heart:nth-child(8) { left: 80%; animation-duration: 8.5s; animation-delay: 4.5s; font-size: 30px; }
-        .heart:nth-child(9) { left: 90%; animation-duration: 10.5s; animation-delay: 1.5s; font-size: 40px; }
-        .heart:nth-child(10) { left: 15%; animation-duration: 9.5s; animation-delay: 3.5s; font-size: 25px; }
-        .heart:nth-child(11) { left: 35%; animation-duration: 11.5s; animation-delay: 0.5s; font-size: 30px; }
-        .heart:nth-child(12) { left: 65%; animation-duration: 12.5s; animation-delay: 2.8s; font-size: 40px; }
-        .heart:nth-child(13) { left: 85%; animation-duration: 7.5s; animation-delay: 4.2s; font-size: 25px; }
-        .heart:nth-child(14) { left: 25%; animation-duration: 14s; animation-delay: 1.8s; font-size: 30px; }
-        .heart:nth-child(15) { left: 75%; animation-duration: 8.8s; animation-delay: 3.2s; font-size: 40px; }
-        .heart:nth-child(16) { left: 5%; animation-duration: 9.2s; animation-delay: 1.2s; font-size: 25px; }
-        .heart:nth-child(17) { left: 45%; animation-duration: 10.8s; animation-delay: 3.8s; font-size: 30px; }
-        .heart:nth-child(18) { left: 95%; animation-duration: 8.2s; animation-delay: 0.8s; font-size: 40px; }
+        /* Verschiedene Herz-Größen und Startpositionen */
+        .heart:nth-child(1) { left: 10%; top: 10%; animation-duration: 4s; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 80%; top: 20%; animation-duration: 5s; animation-delay: 1s; }
+        .heart:nth-child(3) { left: 30%; top: 70%; animation-duration: 3.5s; animation-delay: 2s; }
+        .heart:nth-child(4) { left: 60%; top: 40%; animation-duration: 4.5s; animation-delay: 0.5s; }
+        .heart:nth-child(5) { left: 90%; top: 80%; animation-duration: 6s; animation-delay: 1.5s; }
+        .heart:nth-child(6) { left: 20%; top: 30%; animation-duration: 3.8s; animation-delay: 2.5s; }
+        .heart:nth-child(7) { left: 70%; top: 60%; animation-duration: 5.2s; animation-delay: 0.8s; }
+        .heart:nth-child(8) { left: 40%; top: 90%; animation-duration: 4.2s; animation-delay: 1.8s; }
+        .heart:nth-child(9) { left: 85%; top: 15%; animation-duration: 3.2s; animation-delay: 2.2s; }
+        .heart:nth-child(10) { left: 15%; top: 85%; animation-duration: 5.5s; animation-delay: 0.3s; }
+        .heart:nth-child(11) { left: 55%; top: 25%; animation-duration: 4.8s; animation-delay: 1.3s; }
+        .heart:nth-child(12) { left: 25%; top: 55%; animation-duration: 3.7s; animation-delay: 2.8s; }
+        .heart:nth-child(13) { left: 75%; top: 75%; animation-duration: 5.8s; animation-delay: 0.7s; }
+        .heart:nth-child(14) { left: 35%; top: 35%; animation-duration: 4.3s; animation-delay: 1.7s; }
+        .heart:nth-child(15) { left: 95%; top: 5%; animation-duration: 3.9s; animation-delay: 2.3s; }
+        .heart:nth-child(16) { left: 5%; top: 95%; animation-duration: 5.3s; animation-delay: 0.9s; }
+        .heart:nth-child(17) { left: 65%; top: 65%; animation-duration: 4.7s; animation-delay: 1.9s; }
+        .heart:nth-child(18) { left: 45%; top: 45%; animation-duration: 3.3s; animation-delay: 2.7s; }
 
-        @keyframes float-up {
+        @keyframes flyTowards {
             0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-20vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Herz-Pulse-Animation für mehr Lebendigkeit */
-        .heart:nth-child(odd) {
-            animation-name: float-up-pulse;
-        }
-
-        @keyframes float-up-pulse {
-            0% {
-                transform: translateY(100vh) rotate(0deg) scale(1);
+                transform: translateZ(-1000px) scale(0.1);
                 opacity: 0;
             }
             10% {
                 opacity: 1;
             }
             50% {
-                transform: translateY(50vh) rotate(180deg) scale(1.3);
-            }
-            90% {
+                transform: translateZ(-200px) scale(0.8);
                 opacity: 1;
             }
+            90% {
+                transform: translateZ(100px) scale(2.5);
+                opacity: 0.8;
+            }
             100% {
-                transform: translateY(-20vh) rotate(360deg) scale(0.8);
+                transform: translateZ(200px) scale(3);
                 opacity: 0;
             }
         }
 
-        /* Fallback: Animierter Gradient falls Video nicht lädt */
+        /* Zusätzliche Glow-Effekte */
+        .heart:nth-child(even) {
+            color: #ff69b4;
+            text-shadow: 
+                0 0 15px #ff69b4,
+                0 0 25px #ff69b4,
+                0 0 35px #ff69b4;
+        }
+
+        .heart:nth-child(3n) {
+            color: #ff1493;
+            text-shadow: 
+                0 0 20px #ff1493,
+                0 0 30px #ff1493,
+                0 0 40px #ff1493;
+            animation-name: flyTowardsPulse;
+        }
+
+        @keyframes flyTowardsPulse {
+            0% {
+                transform: translateZ(-1000px) scale(0.1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            25% {
+                transform: translateZ(-600px) scale(0.4);
+                opacity: 1;
+            }
+            50% {
+                transform: translateZ(-200px) scale(1.2);
+                opacity: 1;
+            }
+            75% {
+                transform: translateZ(50px) scale(2.8);
+                opacity: 0.9;
+            }
+            90% {
+                transform: translateZ(150px) scale(3.5);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateZ(300px) scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Sternenfeld-Effekt im Hintergrund */
+        .hearts-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.2), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: starfield 20s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes starfield {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+
+        /* Fallback: Dunkler Weltraum-Gradient */
         .gradient-background {
             position: fixed;
             top: 0;
@@ -111,15 +172,7 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            background: radial-gradient(ellipse at center, #2d1b69 0%, #0c0b2a 100%);
         }
 
         /* Overlay für bessere Lesbarkeit - leichter für Herzen */
@@ -615,21 +668,46 @@
             lastTouchEnd = now;
         }, false);
 
-        // Herzen dynamisch erstellen
+        // 3D Herzen erstellen die auf den User zufliegen
         function createHearts() {
             const heartsContainer = document.querySelector('.hearts-background');
             const heartSymbols = ['♥', '♡', '💕', '💖', '💗', '💘', '💙', '💜', '🤍', '❤️'];
             
-            // 18 Herzen erstellen (15 + 20% = 3 mehr)
+            // 18 Herzen erstellen mit zufälligen Startpositionen
             for (let i = 0; i < 18; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
                 heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                
+                // Zufällige Startposition im gesamten Bildschirm
                 heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
                 heart.style.animationDelay = Math.random() * 5 + 's';
-                heart.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's'; // 3-6 Sekunden
+                
                 heartsContainer.appendChild(heart);
             }
+            
+            // Kontinuierlich neue Herzen erstellen
+            setInterval(() => {
+                if (heartsContainer.children.length < 25) { // Max 25 Herzen gleichzeitig
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // Herz nach Animation entfernen
+                    setTimeout(() => {
+                        if (heart.parentNode) {
+                            heart.parentNode.removeChild(heart);
+                        }
+                    }, 6000);
+                }
+            }, 800); // Neues Herz alle 0.8 Sekunden
         }
 
         // Herzen beim Laden erstellen
