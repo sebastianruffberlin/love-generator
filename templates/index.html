@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Love Generator</title>
     <style>
+        /* General Styles */
         * {
             margin: 0;
             padding: 0;
@@ -18,11 +19,11 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow: hidden; /* Verhindert Scrollbalken */
+            overflow: hidden;
             position: relative;
+            background: radial-gradient(ellipse at center, #1a0f35 0%, #05020b 100%);
         }
         
-        /* 3D Herzen die auf den User zufliegen */
         .hearts-background {
             position: fixed;
             top: 0;
@@ -33,65 +34,23 @@
             overflow: hidden;
             pointer-events: none;
             perspective: 1000px;
-            background: radial-gradient(ellipse at center, #2d1b69 0%, #0c0b2a 100%);
         }
 
+        /* --- CHANGE: Reverted to Icon Hearts --- */
         .heart {
             position: absolute;
-            color: #ff1493;
-            font-size: 20px;
+            font-size: 25px;
             animation: flyTowards linear infinite;
             pointer-events: none;
+            opacity: 0;
+            will-change: transform, opacity;
+            color: #ff1493;
             text-shadow: 
                 0 0 10px #ff1493,
                 0 0 20px #ff1493,
                 0 0 30px #ff1493;
-            opacity: 0;
         }
 
-        /* Verschiedene Herz-Größen und Startpositionen */
-        .heart:nth-child(1) { left: 10%; top: 10%; animation-duration: 4s; animation-delay: 0s; }
-        .heart:nth-child(2) { left: 80%; top: 20%; animation-duration: 5s; animation-delay: 1s; }
-        .heart:nth-child(3) { left: 30%; top: 70%; animation-duration: 3.5s; animation-delay: 2s; }
-        .heart:nth-child(4) { left: 60%; top: 40%; animation-duration: 4.5s; animation-delay: 0.5s; }
-        .heart:nth-child(5) { left: 90%; top: 80%; animation-duration: 6s; animation-delay: 1.5s; }
-        .heart:nth-child(6) { left: 20%; top: 30%; animation-duration: 3.8s; animation-delay: 2.5s; }
-        .heart:nth-child(7) { left: 70%; top: 60%; animation-duration: 5.2s; animation-delay: 0.8s; }
-        .heart:nth-child(8) { left: 40%; top: 90%; animation-duration: 4.2s; animation-delay: 1.8s; }
-        .heart:nth-child(9) { left: 85%; top: 15%; animation-duration: 3.2s; animation-delay: 2.2s; }
-        .heart:nth-child(10) { left: 15%; top: 85%; animation-duration: 5.5s; animation-delay: 0.3s; }
-        .heart:nth-child(11) { left: 55%; top: 25%; animation-duration: 4.8s; animation-delay: 1.3s; }
-        .heart:nth-child(12) { left: 25%; top: 55%; animation-duration: 3.7s; animation-delay: 2.8s; }
-        .heart:nth-child(13) { left: 75%; top: 75%; animation-duration: 5.8s; animation-delay: 0.7s; }
-        .heart:nth-child(14) { left: 35%; top: 35%; animation-duration: 4.3s; animation-delay: 1.7s; }
-        .heart:nth-child(15) { left: 95%; top: 5%; animation-duration: 3.9s; animation-delay: 2.3s; }
-        .heart:nth-child(16) { left: 5%; top: 95%; animation-duration: 5.3s; animation-delay: 0.9s; }
-        .heart:nth-child(17) { left: 65%; top: 65%; animation-duration: 4.7s; animation-delay: 1.9s; }
-        .heart:nth-child(18) { left: 45%; top: 45%; animation-duration: 3.3s; animation-delay: 2.7s; }
-
-        @keyframes flyTowards {
-            0% {
-                transform: translateZ(-1000px) scale(0.1);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            50% {
-                transform: translateZ(-200px) scale(0.8);
-                opacity: 1;
-            }
-            90% {
-                transform: translateZ(100px) scale(2.5);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateZ(200px) scale(3);
-                opacity: 0;
-            }
-        }
-
-        /* Zusätzliche Glow-Effekte */
         .heart:nth-child(even) {
             color: #ff69b4;
             text-shadow: 
@@ -101,45 +60,31 @@
         }
 
         .heart:nth-child(3n) {
-            color: #ff1493;
+            color: #f0f;
             text-shadow: 
-                0 0 20px #ff1493,
-                0 0 30px #ff1493,
-                0 0 40px #ff1493;
-            animation-name: flyTowardsPulse;
+                0 0 20px #f0f,
+                0 0 30px #f0f,
+                0 0 40px #f0f;
         }
 
-        @keyframes flyTowardsPulse {
+        @keyframes flyTowards {
             0% {
-                transform: translateZ(-1000px) scale(0.1);
+                transform: translateZ(-1000px) scale(0.1) translateY(-50px);
                 opacity: 0;
             }
             10% {
                 opacity: 1;
             }
-            25% {
-                transform: translateZ(-600px) scale(0.4);
-                opacity: 1;
-            }
-            50% {
-                transform: translateZ(-200px) scale(1.2);
-                opacity: 1;
-            }
-            75% {
-                transform: translateZ(50px) scale(2.8);
-                opacity: 0.9;
-            }
             90% {
-                transform: translateZ(150px) scale(3.5);
-                opacity: 0.3;
+                transform: translateZ(100px) scale(3.5) translateY(100px);
+                opacity: 0.8;
             }
             100% {
-                transform: translateZ(300px) scale(4);
+                transform: translateZ(200px) scale(4) translateY(150px);
                 opacity: 0;
             }
         }
-
-        /* Sternenfeld-Effekt im Hintergrund */
+        
         .hearts-background::before {
             content: '';
             position: absolute;
@@ -148,34 +93,20 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
-                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.3), transparent),
-                radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.2), transparent);
+                radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.2), transparent),
+                radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.1), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.3), transparent);
             background-repeat: repeat;
             background-size: 200px 100px;
-            animation: starfield 20s linear infinite;
-            opacity: 0.6;
+            animation: starfield 30s linear infinite;
+            opacity: 0.5;
         }
 
         @keyframes starfield {
             0% { transform: translateY(0); }
             100% { transform: translateY(-100px); }
         }
-
-        /* Fallback: Dunkler Weltraum-Gradient */
-        .gradient-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -3;
-            background: radial-gradient(ellipse at center, #2d1b69 0%, #0c0b2a 100%);
-        }
-
-        /* Overlay für bessere Lesbarkeit - leichter für Herzen */
+        
         .video-overlay {
             position: fixed;
             top: 0;
@@ -192,12 +123,41 @@
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            max-width: 800px; /* Etwas breiter für 1920x1080 */
+            max-width: 800px;
             width: 100%;
-            max-height: 1000px; /* Maximale Höhe für 1920x1080 */
-            overflow-y: auto; /* Falls doch mal Inhalt zu hoch wird */
+            max-height: 90vh;
+            overflow-y: auto;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
         
+        .fullscreen-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 2, 20, 0.5);
+            backdrop-filter: blur(5px);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .video-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .title {
             text-align: center;
             color: white;
@@ -206,12 +166,16 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .button-row {
+        .button-row, .era-row {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             justify-content: center;
             flex-wrap: wrap;
+        }
+        
+        .type-btn, .era-btn, .generate-btn, .print-btn, .reset-btn {
+            transition: all 0.3s ease;
         }
         
         .type-btn {
@@ -222,23 +186,12 @@
             color: white;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-size: 16px; /* Größer für Touch */
-            min-width: 140px; /* Bessere Touch-Ziele */
+            font-size: 16px;
         }
         
         .type-btn:hover, .type-btn.active {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
-        }
-        
-        .era-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
         }
         
         .era-btn {
@@ -249,10 +202,7 @@
             color: #ff6b6b;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-size: 14px; /* Größer für Touch */
-            min-width: 120px; /* Bessere Touch-Ziele */
+            font-size: 14px;
         }
         
         .era-btn:hover, .era-btn.active {
@@ -271,8 +221,6 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
         }
         
         .generate-btn:hover {
@@ -286,431 +234,240 @@
             transform: none;
         }
         
-        /* Ladebalken Styles */
-        .loading-container {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #ff6b6b;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-text {
-            color: white;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.3s ease;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
         .result-area {
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.9), rgba(230, 230, 250, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 0 10px rgba(255, 255, 255, 0.6);
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             margin-top: 20px;
-            color: #333;
+            color: #4a2d6b;
             display: none;
-            line-height: 1.6;
-            max-height: 400px; /* Begrenzte Höhe für 1920x1080 */
-            overflow-y: auto; /* Scroll falls Text doch länger wird */
+            line-height: 1.7;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 17px;
+            overflow-y: hidden;
         }
         
-        .print-btn {
-            width: 100%;
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .print-btn, .reset-btn {
+            flex-grow: 1;
             padding: 12px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
             border: none;
             border-radius: 25px;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            display: none;
+            display: none; /* Initially hidden */
         }
         
-        .print-btn:hover {
+        .print-btn {
+             background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        .reset-btn {
+            background: linear-gradient(45deg, #868f96, #596164);
+        }
+        
+        .print-btn:hover, .reset-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
-        /* Kontext-Input entfernt - war hier auskommentiert */
-        
         .error {
             background: rgba(255, 0, 0, 0.1);
             border: 2px solid #ff4444;
-            color: #ff4444;
             padding: 15px;
             border-radius: 10px;
             margin-top: 20px;
             display: none;
         }
         
-        /* Anpassungen für 1920x1080 Touchscreen */
-        @media (min-width: 1920px) {
-            .container {
-                max-width: 900px;
-                padding: 50px;
-            }
-            
-            .title {
-                font-size: 3em;
-                margin-bottom: 40px;
-            }
-            
-            .type-btn, .era-btn {
-                padding: 15px 25px;
-                font-size: 18px;
-            }
-            
-            .generate-btn {
-                padding: 20px;
-                font-size: 20px;
-            }
-        }
-        
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .title {
-                font-size: 2em;
-            }
-            
-            .button-row, .era-row {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .type-btn, .era-btn {
-                width: 100%;
-                max-width: 200px;
-            }
+            .container { padding: 20px; max-height: 85vh; }
+            .title { font-size: 2em; }
+            .button-row, .era-row { flex-direction: column; align-items: stretch; }
         }
 
-        /* Scrollbar Styling */
-        .container::-webkit-scrollbar,
-        .result-area::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .container::-webkit-scrollbar-track,
-        .result-area::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .container::-webkit-scrollbar-thumb,
-        .result-area::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-        }
-
-        .container::-webkit-scrollbar-thumb:hover,
-        .result-area::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
     </style>
 </head>
 <body>
-    <!-- Fallback Gradient Background -->
-    <div class="gradient-background"></div>
-    
-    <!-- Animierte Herzen statt Video -->
     <div class="hearts-background"></div>
-    
     <div class="video-overlay"></div>
+    
+    <div class="fullscreen-loader" id="fullscreenLoader">
+        <div class="video-spinner"></div>
+    </div>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         <h1 class="title">💕 LOVE GENERATOR 💕</h1>
         
         <form id="loveForm">
-            <!-- Art des Textes -->
             <div class="button-row">
                 <button type="button" class="type-btn" data-type="Liebesgedicht">Liebesgedicht</button>
                 <button type="button" class="type-btn" data-type="Liebesbrief">Liebesbrief</button>
             </div>
-            
-            <!-- Jahrhundert -->
             <div class="era-row">
-                <button type="button" class="era-btn" data-era="17">17. Jahrhundert</button>
-                <button type="button" class="era-btn" data-era="18">18. Jahrhundert</button>
-                <button type="button" class="era-btn" data-era="19">19. Jahrhundert</button>
-                <button type="button" class="era-btn" data-era="20">20. Jahrhundert</button>
-                <button type="button" class="era-btn" data-era="21">21. Jahrhundert</button>
+                <button type="button" class="era-btn" data-era="17">17. Jh.</button>
+                <button type="button" class="era-btn" data-era="18">18. Jh.</button>
+                <button type="button" class="era-btn" data-era="19">19. Jh.</button>
+                <button type="button" class="era-btn" data-era="20">20. Jh.</button>
+                <button type="button" class="era-btn" data-era="21">21. Jh.</button>
             </div>
-            
-            <!-- Kontext Input ENTFERNT wie gewünscht -->
-            
-            <!-- Generate Button -->
-            <button type="submit" class="generate-btn" id="generateBtn">
-                ✨ Liebe generieren
-            </button>
+            <button type="submit" class="generate-btn" id="generateBtn">✨ Liebe generieren</button>
         </form>
         
-        <!-- Ladebalken -->
-        <div class="loading-container" id="loadingContainer">
-            <div class="spinner"></div>
-            <div class="loading-text">Dein romantischer Text wird erstellt...</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div style="color: rgba(255,255,255,0.8); font-size: 14px;">
-                Bitte warten, das kann einen Moment dauern...
-            </div>
-        </div>
-        
-        <!-- Ergebnis -->
         <div class="result-area" id="resultArea"></div>
-        
-        <!-- Fehler -->
         <div class="error" id="errorArea"></div>
         
-        <!-- Print Button -->
-        <button class="print-btn" id="printBtn">
-            🖨️ Drucken
-        </button>
+        <div class="action-buttons">
+            <button class="print-btn" id="printBtn">🖨️ Drucken</button>
+            <button class="reset-btn" id="resetBtn">🔄 Neu beginnen</button>
+        </div>
     </div>
 
     <script>
         let selectedType = '';
         let selectedEra = '';
+
+        const mockResponses = {
+            '17_Liebesgedicht': `Oh holdste Maid, Euer Antlitz klar,\nwie's Firmament, so wunderbar.\nMein Herze brennt in lichterloh'n,\nvernehmt mein Fleh'n, verlasst mich schon?\nNein, bleibt bei mir, in Ewigkeit,\nso sei's beschieden, für alle Zeit.`,
+            '17_Liebesbrief': `Hochverehrte Dame,\nmit zitternder Hand führe ich die Feder, um Euch die Tiefen meiner Seele zu offenbaren. Seit dem Tage, da mein Blick den Euren kreuzte, ist mein Herz nicht mehr mein eigen. Es gehört Euch allein, und ich flehe zu den Sternen, dass Ihr dieses bescheidene Geschenk nicht verschmäht.\nIn ewiger Ergebenheit,\nEuer Verehrer.`,
+            '18_Liebesgedicht': `Anmut'ge Seele, Lichtgestalt,\nDein Wesen meine Sinne schallt.\nVernunft gebeut, ich soll's nicht wagen,\ndoch Herz und Seele woll'n es klagen:\nIch liebe Dich, mit jeder Faser,\nmein Glück, mein Stern, mein Lebensfaser.`,
+            '18_Liebesbrief': `Meine Teuerste,\ndie Gesetze der Vernunft mögen uns Fesseln anlegen, doch die Gefühle meines Herzens sprengen jede Kette. In einer Welt der Aufklärung seid Ihr das hellste Licht, das meine Gedanken erhellt. Jeder Moment ohne Euch ist eine verlorene Ewigkeit.\nEwig der Eure.`,
+            '19_Liebesgedicht': `In düst'rer Nacht, ein heller Schein,\nso drangst du in mein Herz hinein.\nDie Welt voll Sturm und wildem Toben,\nwird durch dein Lächeln aufgehoben.\nDu bist mein Anker, Fels und Hort,\nan diesem und an jedem Ort.`,
+            '19_Liebesbrief': `Mein einziges Herz,\nin dieser Zeit des Umbruchs und der stählernen Riesen seid Ihr mein ruhender Pol. Die Sehnsucht nach Eurer Nähe verzehrt mich und treibt mich an, alle Hindernisse zu überwinden, die das Schicksal uns in den Weg legt.\nIn unsterblicher Liebe,\nDein.`,
+            '20_Liebesgedicht': `Asphalt und Neon, Lärm der Stadt,\nich hab' dein Lächeln niemals satt.\nDu bist mein Swing, mein Rock'n'Roll,\nmachst mein Herz und meine Seele voll.\nIn dieser schnellen, wirren Zeit,\nbist du meine Beständigkeit.`,
+            '20_Liebesbrief': `Mein Liebling,\nzwischen den Zeilen von Zeitungspapier und dem Flackern des Kinos sehe ich nur dein Gesicht. Du bist moderner als jede Erfindung und zeitloser als jeder Klassiker. Mit dir möchte ich durch die Jahrzehnte tanzen, Hand in Hand.\nIch liebe dich.`,
+            '21_Liebesgedicht': `Dein Profilbild, ein Klick, ein Like,\nmein Herz macht einen Purzelbaum-Strike.\nWir chatten, texten, Tag und Nacht,\nhaben uns online um den Verstand gebracht.\nDoch offline, real, ist es noch krasser,\nmeine Liebe zu dir wird immer... besser.\nOkay, der Reim war schlecht, du weißt, was ich mein',\nwill einfach nur für immer bei dir sein.`,
+            '21_Liebesbrief': `Hey,\nich weiß, das hier ist irgendwie oldschool, aber 140 Zeichen reichen einfach nicht aus.\nJede Nachricht von dir lässt mein Handy aufleuchten und mein Herz schneller schlagen. Du bist mein Lieblings-Meme, meine Endlos-Playlist und der einzige Mensch, mit dem ich meinen Akku teilen würde.\nHoffe, wir sehen uns bald.\n<3`,
+            'default': 'Es tut mir leid, aber für diese Auswahl konnte ich keinen passenden Text finden. Bitte versuchen Sie eine andere Kombination.'
+        };
+
+        function fetchMockResponse(type, era) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const key = `${era}_${type}`;
+                    const text = mockResponses[key] || mockResponses['default'];
+                    resolve({ text: text });
+                }, 2500);
+            });
+        }
         
-        // Button Selection Logic
-        document.querySelectorAll('.type-btn').forEach(btn => {
+        const typeBtns = document.querySelectorAll('.type-btn');
+        const eraBtns = document.querySelectorAll('.era-btn');
+        const loveForm = document.getElementById('loveForm');
+        const generateBtn = document.getElementById('generateBtn');
+        const resultArea = document.getElementById('resultArea');
+        const errorArea = document.getElementById('errorArea');
+        const printBtn = document.getElementById('printBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const mainContainer = document.getElementById('mainContainer');
+        const fullscreenLoader = document.getElementById('fullscreenLoader');
+
+        typeBtns.forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                typeBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 selectedType = this.dataset.type;
             });
         });
         
-        document.querySelectorAll('.era-btn').forEach(btn => {
+        eraBtns.forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('.era-btn').forEach(b => b.classList.remove('active'));
+                eraBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 selectedEra = this.dataset.era;
             });
         });
         
-        // Form Submission
-        document.getElementById('loveForm').addEventListener('submit', async function(e) {
+        loveForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            // Validation
             if (!selectedType || !selectedEra) {
                 showError('Bitte wähle sowohl eine Art des Textes als auch ein Jahrhundert aus.');
                 return;
             }
             
-            // Kein Kontext mehr, da Eingabefeld entfernt
-            const context = '';
-            
-            const data = {
-                text_type: selectedType,
-                era: selectedEra,
-                context: context
-            };
-            
-            // UI Elements
-            const generateBtn = document.getElementById('generateBtn');
-            const loadingContainer = document.getElementById('loadingContainer');
-            const resultArea = document.getElementById('resultArea');
-            const errorArea = document.getElementById('errorArea');
-            const printBtn = document.getElementById('printBtn');
-            const progressFill = document.getElementById('progressFill');
-            
-            // Start Loading
+            fullscreenLoader.style.display = 'flex';
+            mainContainer.style.opacity = '0';
+            mainContainer.style.transform = 'scale(0.95)';
             generateBtn.disabled = true;
-            generateBtn.textContent = 'Generiere...';
-            loadingContainer.style.display = 'block';
-            resultArea.style.display = 'none';
-            errorArea.style.display = 'none';
-            printBtn.style.display = 'none';
-            
-            // Progress Bar Animation
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += Math.random() * 12 + 3;
-                if (progress > 92) progress = 92;
-                progressFill.style.width = progress + '%';
-            }, 150);
-            
+
             try {
-                const response = await fetch('/generate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+                const responseData = await fetchMockResponse(selectedType, selectedEra);
                 
-                const responseData = await response.json();
-                
-                // Complete Progress Bar
-                clearInterval(progressInterval);
-                progressFill.style.width = '100%';
-                
-                setTimeout(() => {
-                    loadingContainer.style.display = 'none';
-                    
-                    if (responseData.error) {
-                        showError('Fehler beim Generieren: ' + responseData.error);
-                    } else {
-                        // Show Result - Text bereits backend-seitig auf 12 Zeilen begrenzt
-                        let text = responseData.text;
-                        
-                        // Zusätzliche Frontend-Sicherheit: Falls doch mehr als 12 Zeilen
-                        const lines = text.split('\n');
-                        if (lines.length > 12) {
-                            text = lines.slice(0, 12).join('\n');
-                            if (!text.endsWith('.') && !text.endsWith('!') && !text.endsWith('?')) {
-                                text += '...';
-                            }
-                        }
-                        
-                        resultArea.innerHTML = text.replace(/\n/g, '<br>');
-                        resultArea.style.display = 'block';
-                        printBtn.style.display = 'block';
-                    }
-                    
-                    // Reset Button
-                    generateBtn.disabled = false;
-                    generateBtn.textContent = '✨ Liebe generieren';
-                }, 800);
+                fullscreenLoader.style.display = 'none';
+                mainContainer.style.opacity = '1';
+                mainContainer.style.transform = 'scale(1)';
+
+                if (responseData.error) {
+                    showError('Fehler: ' + responseData.error);
+                } else {
+                    resultArea.innerHTML = responseData.text.replace(/\n/g, '<br>');
+                    resultArea.style.display = 'block';
+                    printBtn.style.display = 'block';
+                    resetBtn.style.display = 'block';
+                }
+                generateBtn.disabled = false;
                 
             } catch (error) {
-                clearInterval(progressInterval);
-                loadingContainer.style.display = 'none';
-                showError('Verbindungsfehler: ' + error.message);
-                
+                fullscreenLoader.style.display = 'none';
+                mainContainer.style.opacity = '1';
+                mainContainer.style.transform = 'scale(1)';
+                showError('Unerwarteter Fehler: ' + error.message);
                 generateBtn.disabled = false;
-                generateBtn.textContent = '✨ Liebe generieren';
             }
         });
         
-        // Print Function
-        document.getElementById('printBtn').addEventListener('click', function() {
+        printBtn.addEventListener('click', function() {
             const resultText = document.getElementById('resultArea').innerText;
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>Romantischer Text</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
-                            h1 { color: #ff6b6b; text-align: center; }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>💕 Dein romantischer Text 💕</h1>
-                        <div style="white-space: pre-wrap;">${resultText}</div>
-                    </body>
-                </html>
-            `);
+            printWindow.document.write(`<html><head><title>Romantischer Text</title><style>body{font-family:'Times New Roman',serif;padding:40px;line-height:1.6;}h1{color:#d9534f;text-align:center;}div{white-space:pre-wrap;font-size:1.1em;}</style></head><body><h1>💕 Dein romantischer Text 💕</h1><hr><div>${resultText}</div></body></html>`);
             printWindow.document.close();
+            printWindow.focus();
             printWindow.print();
+            printWindow.close();
+        });
+
+        resetBtn.addEventListener('click', function() {
+            resultArea.style.display = 'none';
+            printBtn.style.display = 'none';
+            resetBtn.style.display = 'none';
+            errorArea.style.display = 'none';
+            selectedType = '';
+            selectedEra = '';
+            typeBtns.forEach(b => b.classList.remove('active'));
+            eraBtns.forEach(b => b.classList.remove('active'));
         });
         
-        // Error Display Function
         function showError(message) {
-            const errorArea = document.getElementById('errorArea');
             errorArea.textContent = message;
             errorArea.style.display = 'block';
-            
-            setTimeout(() => {
-                errorArea.style.display = 'none';
-            }, 5000);
+            setTimeout(() => { errorArea.style.display = 'none'; }, 5000);
         }
 
-        // Touch-Optimierung: Prevent zoom on double tap
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-
-        // 3D Herzen erstellen die auf den User zufliegen
         function createHearts() {
             const heartsContainer = document.querySelector('.hearts-background');
-            const heartSymbols = ['♥', '♡', '💕', '💖', '💗', '💘', '💙', '💜', '🤍', '❤️'];
-            
-            // 18 Herzen erstellen mit zufälligen Startpositionen
-            for (let i = 0; i < 18; i++) {
+            if (!heartsContainer) return;
+            const heartSymbols = ['♥', '♡', '💕', '💖', '💗', '💘'];
+            const heartCount = 30;
+            heartsContainer.innerHTML = '';
+            for (let i = 0; i < heartCount; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
                 heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-                
-                // Zufällige Startposition im gesamten Bildschirm
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 5 + 's';
-                heart.style.animationDuration = (Math.random() * 3 + 3) + 's'; // 3-6 Sekunden
-                
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.animationDelay = Math.random() * 8 + 's';
+                heart.style.animationDuration = (Math.random() * 5 + 6) + 's';
                 heartsContainer.appendChild(heart);
             }
-            
-            // Kontinuierlich neue Herzen erstellen
-            setInterval(() => {
-                if (heartsContainer.children.length < 25) { // Max 25 Herzen gleichzeitig
-                    const heart = document.createElement('div');
-                    heart.className = 'heart';
-                    heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-                    heart.style.left = Math.random() * 100 + '%';
-                    heart.style.top = Math.random() * 100 + '%';
-                    heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                    
-                    heartsContainer.appendChild(heart);
-                    
-                    // Herz nach Animation entfernen
-                    setTimeout(() => {
-                        if (heart.parentNode) {
-                            heart.parentNode.removeChild(heart);
-                        }
-                    }, 6000);
-                }
-            }, 800); // Neues Herz alle 0.8 Sekunden
         }
 
-        // Herzen beim Laden erstellen
         document.addEventListener('DOMContentLoaded', createHearts);
     </script>
 </body>
