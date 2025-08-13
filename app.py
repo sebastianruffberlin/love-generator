@@ -27,20 +27,43 @@ def generate_text():
         if not text_type or not era:
             return jsonify({'error': 'Textart und Jahrhundert sind erforderlich'}), 400
         
-        prompt = f"Schreibe einen {text_type} im Stil des {era}. Jahrhunderts. Beziehungskontext: {context}."
+        # Erweiterte Prompt für maximale Länge
+        prompt = f"""Schreibe einen {text_type} im Stil des {era}. Jahrhunderts. 
+        
+        WICHTIGE VORGABEN:
+        - Maximal 12 Zeilen/Verse
+        - Romantisch und stilecht für das {era}. Jahrhundert
+        - Vollständiger, abgeschlossener Text
+        - Deutsche Sprache
+        
+        Beziehungskontext: {context}."""
         
         response = client.chat.completions.create(
             model="gpt-4o-mini",  # Kostengünstiger
             messages=[
-                {"role": "system", "content": "Du bist ein kreativer Autor für romantische Texte im deutschen Sprachraum."},
+                {
+                    "role": "system", 
+                    "content": """Du bist ein kreativer Autor für romantische Texte im deutschen Sprachraum. 
+                    Schreibe IMMER maximal 12 Zeilen oder Verse. Achte darauf, dass der Text vollständig und abgeschlossen ist.
+                    Verwende authentische Sprache der jeweiligen Epoche."""
+                },
                 {"role": "user", "content": prompt}
             ],
             temperature=0.8,
-            max_tokens=800,
+            max_tokens=400,  # Reduziert für kürzere Texte
             timeout=30
         )
         
-        generated_text = response.choices[0].message.content
+        generated_text = response.choices[0].message.content.strip()
+        
+        # Zusätzliche Sicherheitsprüfung: Auf 12 Zeilen begrenzen
+        lines = generated_text.split('\n')
+        if len(lines) > 12:
+            generated_text = '\n'.join(lines[:12])
+            # Sicherstellen, dass der Text nicht mitten im Satz abbricht
+            if not generated_text.endswith(('.', '!', '?', '...')):
+                generated_text += '...'
+        
         return jsonify({'text': generated_text})
         
     except Exception as e:
