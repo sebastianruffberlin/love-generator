@@ -18,7 +18,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 20px 20px 80px 20px; /* Add padding-bottom for footer */
             overflow: hidden;
             position: relative;
             background: radial-gradient(ellipse at center, #1a0f35 0%, #05020b 100%);
@@ -36,7 +36,6 @@
             perspective: 1000px;
         }
 
-        /* --- CHANGE: Reverted to Icon Hearts --- */
         .heart {
             position: absolute;
             font-size: 25px;
@@ -125,39 +124,10 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             max-width: 800px;
             width: 100%;
-            max-height: 90vh;
+            max-height: calc(100vh - 100px); /* Adjust for footer and padding */
             overflow-y: auto;
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
         
-        .fullscreen-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 2, 20, 0.5);
-            backdrop-filter: blur(5px);
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .video-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid transparent;
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .title {
             text-align: center;
             color: white;
@@ -178,13 +148,22 @@
             transition: all 0.3s ease;
         }
         
+        .type-btn, .era-btn {
+            cursor: pointer;
+        }
+
+        .type-btn:disabled, .era-btn:disabled, .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .type-btn {
             padding: 12px 20px;
             border: 2px solid white;
             border-radius: 25px;
             background: transparent;
             color: white;
-            cursor: pointer;
             font-weight: bold;
             font-size: 16px;
         }
@@ -200,7 +179,6 @@
             border-radius: 20px;
             background: transparent;
             color: #ff6b6b;
-            cursor: pointer;
             font-weight: bold;
             font-size: 14px;
         }
@@ -228,12 +206,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
-        .generate-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
         .result-area {
             background: linear-gradient(135deg, rgba(255, 240, 245, 0.9), rgba(230, 230, 250, 0.9));
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -247,10 +219,48 @@
             font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 17px;
             overflow-y: hidden;
+            position: relative; /* Needed for the loader overlay */
+            min-height: 280px; /* Ensure space for loader */
         }
         
+        .result-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            border-radius: 15px; /* Match parent */
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .result-loader .spinner {
+             width: 50px;
+             height: 50px;
+             border: 4px solid rgba(74, 45, 107, 0.2);
+             border-top-color: #4a2d6b;
+             border-radius: 50%;
+             animation: spin 1s linear infinite;
+        }
+
+        .result-loader .loading-text {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #4a2d6b;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .action-buttons {
-            display: flex;
+            display: none; /* Hidden by default */
             gap: 15px;
             margin-top: 20px;
         }
@@ -263,7 +273,6 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
-            display: none; /* Initially hidden */
         }
         
         .print-btn {
@@ -281,14 +290,41 @@
         .error {
             background: rgba(255, 0, 0, 0.1);
             border: 2px solid #ff4444;
+            color: #ff4444;
             padding: 15px;
             border-radius: 10px;
             margin-top: 20px;
             display: none;
         }
+
+        /* --- FOOTER --- */
+        .page-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0,0,0, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .footer-logo {
+            height: 35px;
+        }
+
+        .footer-url {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: bold;
+        }
         
         @media (max-width: 768px) {
-            .container { padding: 20px; max-height: 85vh; }
+            .container { padding: 20px; }
             .title { font-size: 2em; }
             .button-row, .era-row { flex-direction: column; align-items: stretch; }
         }
@@ -298,10 +334,6 @@
 <body>
     <div class="hearts-background"></div>
     <div class="video-overlay"></div>
-    
-    <div class="fullscreen-loader" id="fullscreenLoader">
-        <div class="video-spinner"></div>
-    </div>
 
     <div class="container" id="mainContainer">
         <h1 class="title">💕 LOVE GENERATOR 💕</h1>
@@ -321,14 +353,26 @@
             <button type="submit" class="generate-btn" id="generateBtn">✨ Liebe generieren</button>
         </form>
         
-        <div class="result-area" id="resultArea"></div>
+        <div class="result-area" id="resultArea">
+            <div class="result-loader" id="resultLoader">
+                <div class="spinner"></div>
+                <div class="loading-text">Text wird generiert...</div>
+            </div>
+        </div>
         <div class="error" id="errorArea"></div>
         
-        <div class="action-buttons">
+        <div class="action-buttons" id="actionButtons">
             <button class="print-btn" id="printBtn">🖨️ Drucken</button>
             <button class="reset-btn" id="resetBtn">🔄 Neu beginnen</button>
         </div>
     </div>
+
+    <!-- --- FOOTER --- -->
+    <footer class="page-footer">
+        <!-- The logo is expected to be in the same directory as the HTML file -->
+        <img src="logo.png" alt="Stadtmuseum Logo" class="footer-logo" onerror="this.style.display='none'">
+        <span class="footer-url">www.stadtmuseum.de</span>
+    </footer>
 
     <script>
         let selectedType = '';
@@ -360,14 +404,20 @@
         
         const typeBtns = document.querySelectorAll('.type-btn');
         const eraBtns = document.querySelectorAll('.era-btn');
-        const loveForm = document.getElementById('loveForm');
         const generateBtn = document.getElementById('generateBtn');
+        const loveForm = document.getElementById('loveForm');
         const resultArea = document.getElementById('resultArea');
         const errorArea = document.getElementById('errorArea');
+        const actionButtons = document.getElementById('actionButtons');
         const printBtn = document.getElementById('printBtn');
         const resetBtn = document.getElementById('resetBtn');
-        const mainContainer = document.getElementById('mainContainer');
-        const fullscreenLoader = document.getElementById('fullscreenLoader');
+        const resultLoader = document.getElementById('resultLoader');
+
+        function setFormEnabled(enabled) {
+            typeBtns.forEach(btn => btn.disabled = !enabled);
+            eraBtns.forEach(btn => btn.disabled = !enabled);
+            generateBtn.disabled = !enabled;
+        }
 
         typeBtns.forEach(btn => {
             btn.addEventListener('click', function() {
@@ -392,34 +442,31 @@
                 return;
             }
             
-            fullscreenLoader.style.display = 'flex';
-            mainContainer.style.opacity = '0';
-            mainContainer.style.transform = 'scale(0.95)';
-            generateBtn.disabled = true;
+            setFormEnabled(false);
+            actionButtons.style.display = 'none';
+            errorArea.style.display = 'none';
+            resultArea.style.display = 'block';
+            resultArea.innerHTML = ''; 
+            resultLoader.style.display = 'flex';
+            resultArea.appendChild(resultLoader);
 
             try {
                 const responseData = await fetchMockResponse(selectedType, selectedEra);
                 
-                fullscreenLoader.style.display = 'none';
-                mainContainer.style.opacity = '1';
-                mainContainer.style.transform = 'scale(1)';
+                resultLoader.style.display = 'none';
 
                 if (responseData.error) {
                     showError('Fehler: ' + responseData.error);
                 } else {
                     resultArea.innerHTML = responseData.text.replace(/\n/g, '<br>');
-                    resultArea.style.display = 'block';
-                    printBtn.style.display = 'block';
-                    resetBtn.style.display = 'block';
+                    actionButtons.style.display = 'flex';
                 }
-                generateBtn.disabled = false;
                 
             } catch (error) {
-                fullscreenLoader.style.display = 'none';
-                mainContainer.style.opacity = '1';
-                mainContainer.style.transform = 'scale(1)';
+                resultLoader.style.display = 'none';
                 showError('Unerwarteter Fehler: ' + error.message);
-                generateBtn.disabled = false;
+            } finally {
+                setFormEnabled(true);
             }
         });
         
@@ -435,19 +482,19 @@
 
         resetBtn.addEventListener('click', function() {
             resultArea.style.display = 'none';
-            printBtn.style.display = 'none';
-            resetBtn.style.display = 'none';
+            actionButtons.style.display = 'none';
             errorArea.style.display = 'none';
             selectedType = '';
             selectedEra = '';
             typeBtns.forEach(b => b.classList.remove('active'));
             eraBtns.forEach(b => b.classList.remove('active'));
+            setFormEnabled(true);
         });
         
         function showError(message) {
             errorArea.textContent = message;
             errorArea.style.display = 'block';
-            setTimeout(() => { errorArea.style.display = 'none'; }, 5000);
+            resultArea.style.display = 'none';
         }
 
         function createHearts() {
