@@ -13,12 +13,46 @@
         
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow: hidden; /* Verhindert Scrollbalken */
+            position: relative;
+        }
+        
+        /* Hintergrund Video */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            object-fit: cover;
+        }
+
+        /* Fallback Gradient falls Video nicht lädt */
+        .gradient-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Overlay für bessere Lesbarkeit */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
         }
         
         .container {
@@ -27,8 +61,10 @@
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            max-width: 800px; /* Etwas breiter für 1920x1080 */
             width: 100%;
+            max-height: 1000px; /* Maximale Höhe für 1920x1080 */
+            overflow-y: auto; /* Falls doch mal Inhalt zu hoch wird */
         }
         
         .title {
@@ -57,6 +93,8 @@
             font-weight: bold;
             transition: all 0.3s ease;
             white-space: nowrap;
+            font-size: 16px; /* Größer für Touch */
+            min-width: 140px; /* Bessere Touch-Ziele */
         }
         
         .type-btn:hover, .type-btn.active {
@@ -82,6 +120,8 @@
             font-weight: bold;
             transition: all 0.3s ease;
             white-space: nowrap;
+            font-size: 14px; /* Größer für Touch */
+            min-width: 120px; /* Bessere Touch-Ziele */
         }
         
         .era-btn:hover, .era-btn.active {
@@ -174,6 +214,8 @@
             color: #333;
             display: none;
             line-height: 1.6;
+            max-height: 400px; /* Begrenzte Höhe für 1920x1080 */
+            overflow-y: auto; /* Scroll falls Text doch länger wird */
         }
         
         .print-btn {
@@ -195,27 +237,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
-        .context-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
-            margin-bottom: 20px;
-            resize: vertical;
-        }
-        
-        .context-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .context-input:focus {
-            outline: none;
-            border-color: #ff6b6b;
-            background: rgba(255, 255, 255, 0.2);
-        }
+        /* Kontext-Input entfernt - war hier auskommentiert */
         
         .error {
             background: rgba(255, 0, 0, 0.1);
@@ -225,6 +247,29 @@
             border-radius: 10px;
             margin-top: 20px;
             display: none;
+        }
+        
+        /* Anpassungen für 1920x1080 Touchscreen */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 900px;
+                padding: 50px;
+            }
+            
+            .title {
+                font-size: 3em;
+                margin-bottom: 40px;
+            }
+            
+            .type-btn, .era-btn {
+                padding: 15px 25px;
+                font-size: 18px;
+            }
+            
+            .generate-btn {
+                padding: 20px;
+                font-size: 20px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -246,9 +291,45 @@
                 max-width: 200px;
             }
         }
+
+        /* Scrollbar Styling */
+        .container::-webkit-scrollbar,
+        .result-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-track,
+        .result-area::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .container::-webkit-scrollbar-thumb,
+        .result-area::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .container::-webkit-scrollbar-thumb:hover,
+        .result-area::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 <body>
+    <!-- Fallback Gradient Background -->
+    <div class="gradient-background"></div>
+    
+    <!-- Hintergrund Video -->
+    <video class="video-background" autoplay muted loop id="bgVideo">
+        <!-- Lokales Video (ersetzen Sie mit Ihrem Video) -->
+        <source src="/static/background-video.mp4" type="video/mp4">
+        <!-- Fallback für Online-Video falls gewünscht -->
+        <!-- <source src="https://example.com/your-video.mp4" type="video/mp4"> -->
+    </video>
+    
+    <div class="video-overlay"></div>
+
     <div class="container">
         <h1 class="title">💕 LOVE GENERATOR 💕</h1>
         
@@ -268,13 +349,7 @@
                 <button type="button" class="era-btn" data-era="21">21. Jahrhundert</button>
             </div>
             
-            <!-- Kontext Input -->
-            <textarea 
-                class="context-input" 
-                id="context" 
-                placeholder="Beschreibe den Anlass oder die Situation für deinen romantischen Text..."
-                rows="3"
-            ></textarea>
+            <!-- Kontext Input ENTFERNT wie gewünscht -->
             
             <!-- Generate Button -->
             <button type="submit" class="generate-btn" id="generateBtn">
@@ -337,7 +412,8 @@
                 return;
             }
             
-            const context = document.getElementById('context').value;
+            // Kein Kontext mehr, da Eingabefeld entfernt
+            const context = '';
             
             const data = {
                 text_type: selectedType,
@@ -390,8 +466,19 @@
                     if (responseData.error) {
                         showError('Fehler beim Generieren: ' + responseData.error);
                     } else {
-                        // Show Result
-                        resultArea.innerHTML = responseData.text.replace(/\n/g, '<br>');
+                        // Show Result - Text bereits backend-seitig auf 12 Zeilen begrenzt
+                        let text = responseData.text;
+                        
+                        // Zusätzliche Frontend-Sicherheit: Falls doch mehr als 12 Zeilen
+                        const lines = text.split('\n');
+                        if (lines.length > 12) {
+                            text = lines.slice(0, 12).join('\n');
+                            if (!text.endsWith('.') && !text.endsWith('!') && !text.endsWith('?')) {
+                                text += '...';
+                            }
+                        }
+                        
+                        resultArea.innerHTML = text.replace(/\n/g, '<br>');
                         resultArea.style.display = 'block';
                         printBtn.style.display = 'block';
                     }
@@ -444,6 +531,27 @@
                 errorArea.style.display = 'none';
             }, 5000);
         }
+
+        // Touch-Optimierung: Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Video Fallback handling
+        document.getElementById('bgVideo').addEventListener('error', function() {
+            console.log('Video konnte nicht geladen werden, verwende Gradient-Hintergrund');
+            // Gradient-Background ist bereits als Fallback vorhanden
+        });
+
+        // Video loaded successfully
+        document.getElementById('bgVideo').addEventListener('loadeddata', function() {
+            console.log('Hintergrund-Video erfolgreich geladen');
+        });
     </script>
 </body>
 </html>
