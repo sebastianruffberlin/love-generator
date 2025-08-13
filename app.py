@@ -31,7 +31,7 @@ def generate_text():
         prompt = f"""Schreibe einen {text_type} im Stil des {era}. Jahrhunderts. 
         
         WICHTIGE VORGABEN:
-        - Maximal 12 Zeilen/Verse
+        - Maximal 8 Zeilen/Verse
         - Romantisch und stilecht für das {era}. Jahrhundert
         - Vollständiger, abgeschlossener Text
         - Deutsche Sprache
@@ -44,7 +44,7 @@ def generate_text():
                 {
                     "role": "system", 
                     "content": """Du bist ein kreativer Autor für romantische Texte im deutschen Sprachraum. 
-                    Schreibe IMMER maximal 12 Zeilen oder Verse. Achte darauf, dass der Text vollständig und abgeschlossen ist.
+                    Schreibe IMMER maximal 8 Zeilen oder Verse. Achte darauf, dass der Text vollständig und abgeschlossen ist.
                     Verwende authentische Sprache der jeweiligen Epoche."""
                 },
                 {"role": "user", "content": prompt}
@@ -58,7 +58,7 @@ def generate_text():
         
         # Zusätzliche Sicherheitsprüfung: Auf 12 Zeilen begrenzen
         lines = generated_text.split('\n')
-        if len(lines) > 12:
+        if len(lines) > 8:
             generated_text = '\n'.join(lines[:12])
             # Sicherstellen, dass der Text nicht mitten im Satz abbricht
             if not generated_text.endswith(('.', '!', '?', '...')):
