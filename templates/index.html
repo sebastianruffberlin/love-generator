@@ -18,12 +18,53 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px 20px 80px 20px; /* Add padding-bottom for footer */
+            /* Add padding for header and footer */
+            padding: 80px 20px; 
             overflow: hidden;
             position: relative;
             background: radial-gradient(ellipse at center, #1a0f35 0%, #05020b 100%);
         }
         
+        /* --- HEADER --- */
+        .page-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .header-logo {
+            height: 35px;
+        }
+
+        /* --- FOOTER --- */
+        .page-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .footer-url {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
         .hearts-background {
             position: fixed;
             top: 0;
@@ -124,7 +165,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             max-width: 800px;
             width: 100%;
-            max-height: calc(100vh - 100px); /* Adjust for footer and padding */
+            max-height: calc(100vh - 160px); /* Adjust for header/footer and padding */
             overflow-y: auto;
         }
         
@@ -296,32 +337,6 @@
             margin-top: 20px;
             display: none;
         }
-
-        /* --- FOOTER --- */
-        .page-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            background: rgba(0,0,0, 0.2);
-            backdrop-filter: blur(5px);
-            z-index: 10;
-        }
-
-        .footer-logo {
-            height: 35px;
-        }
-
-        .footer-url {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            font-weight: bold;
-        }
         
         @media (max-width: 768px) {
             .container { padding: 20px; }
@@ -332,6 +347,11 @@
     </style>
 </head>
 <body>
+    <!-- --- HEADER --- -->
+    <header class="page-header">
+        <img src="https://raw.githubusercontent.com/sebastianruffberlin/love-generator/main/templates/logo.png" alt="Stadtmuseum Logo" class="header-logo">
+    </header>
+
     <div class="hearts-background"></div>
     <div class="video-overlay"></div>
 
@@ -369,8 +389,6 @@
 
     <!-- --- FOOTER --- -->
     <footer class="page-footer">
-        <!-- The logo is expected to be in the same directory as the HTML file -->
-        <img src="logo.png" alt="Stadtmuseum Logo" class="footer-logo" onerror="this.style.display='none'">
         <span class="footer-url">www.stadtmuseum.de</span>
     </footer>
 
